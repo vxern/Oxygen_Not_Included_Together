@@ -72,7 +72,7 @@ namespace ONI_Together.Misc
                 RebuildFromBlob(storage, blobVar.ByteArray, diseaseReason);
                 return;
             }
-            
+
             DebugConsole.LogError($"[Storage/RebuildStorageFromData] Failed to rebuild storage from data! Key: {keyPrefix + "stor"} not found!");
         }
 
@@ -119,14 +119,14 @@ namespace ONI_Together.Misc
                 }
             }
         }
-        
+
         private static void ClearStorage(Storage storage)
         {
             for (int i = storage.items.Count - 1; i >= 0; i--)
                 storage.items[i].DeleteObject();
             storage.items.Clear();
         }
-        
+
         // UP = Utility Path
         private const int UP_FIRST_CELL_BITS = 22;
         private const int UP_SEG_BITS = 4;
@@ -134,7 +134,7 @@ namespace ONI_Together.Misc
         private const int UP_MAX_SEGMENTS = 2;
         private const int UP_MAX_LEN_PER_SEG = 4;
         private const int UP_MAX_CELLS_PER_CHUNK = 1 + UP_MAX_SEGMENTS * UP_MAX_LEN_PER_SEG; // 9
-        
+
         // Derived bit masks/shifts
         private const int UP_FIRST_CELL_MASK = (1 << UP_FIRST_CELL_BITS) - 1;
         private const int UP_SEGMENTS_BITS = UP_SEG_BITS * UP_MAX_SEGMENTS;
@@ -142,7 +142,7 @@ namespace ONI_Together.Misc
         private const int UP_SEGMENTS_SHIFT = UP_FIRST_CELL_BITS;
         private const int UP_SEG_COUNT_MASK = (1 << UP_SEG_COUNT_BITS) - 1;
         private const int UP_SEG_COUNT_SHIFT = UP_FIRST_CELL_BITS + UP_SEGMENTS_BITS;
-        
+
         /// <summary>
         /// Encodes a utility build path into an array of 32-bit chunks, each packing up to 9 cells.
         /// Bits 0-21: firstCell index. Bits 22-29: up to 2 direction-run segments (4-bit each:
@@ -214,7 +214,7 @@ namespace ONI_Together.Misc
 
             return chunks.ToArray();
         }
-        
+
         /// <summary>
         /// Decodes an array of 9-cell chunk uints back into a flat int[] of Grid cell indices.
         /// Each chunk is decoded via DecodeChunk and concatenated in order.
@@ -380,20 +380,20 @@ namespace ONI_Together.Misc
                 if (!Grid.IsValidCell(cell))
                     continue;
 
-                bool hasBuilding = false;
+                bool keep = false;
                 foreach (var layer in Grid.ObjectLayers)
                 {
                     if (layer.TryGetValue(cell, out var obj) && obj != null)
                     {
-                        if (obj.GetComponent<Building>() != null)
+                        if (obj.GetComponent<LogicPorts>() != null || obj.GetComponent<LogicGateBase>() != null)
                         {
-                            hasBuilding = true;
+                            keep = true;
                             break;
                         }
                     }
                 }
 
-                if (!hasBuilding)
+                if (!keep)
                     mgr.RemoveVisElem(elem);
             }
         }
