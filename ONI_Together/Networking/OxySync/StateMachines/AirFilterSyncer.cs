@@ -64,7 +64,7 @@ namespace ONI_Together.Networking.OxySync.StateMachines
             var sm = _smi.sm;
             if (_smi.IsInsideState(sm.hasFilter.converting)) return 2;
             if (_smi.IsInsideState(sm.hasFilter.idle)) return 1;
-            if (_smi.IsInsideState(sm.waiting)) return 1;
+            if (_smi.IsInsideState(sm.waiting)) return 0;
             return 0;
         }
 
