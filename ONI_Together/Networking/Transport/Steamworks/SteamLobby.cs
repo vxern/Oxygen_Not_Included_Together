@@ -306,6 +306,11 @@ namespace ONI_Together.Networking.Transport.Steamworks
 			SteamMatchmaking.JoinLobby(lobbyId);
 		}
 
+		public static void CancelPendingJoinCallback()
+		{
+			_onLobbyJoined = null;
+		}
+
 		public static List<CSteamID> GetAllLobbyMembers()
 		{
 			using var _ = Profiler.Scope();

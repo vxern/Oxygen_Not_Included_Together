@@ -52,6 +52,7 @@ namespace ONI_Together.UI
 
 			if (Instance != null)
 			{
+				SteamLobby.CancelPendingJoinCallback();
 				UnityEngine.Object.Destroy(Instance.gameObject);
 				Instance = null;
 			}
